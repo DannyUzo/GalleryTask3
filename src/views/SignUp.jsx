@@ -19,10 +19,8 @@ onAuthStateChanged(auth, (currentUser) => {
 
 const signUp = async () => {
  try{
-     const user = await createUserWithEmailAndPassword(auth, signUpEmail,signUpPassword);
-    console.log(user)
+     await createUserWithEmailAndPassword(auth, signUpEmail,signUpPassword);
  } catch (error) {
-    console.log(error.message);
     setError(error.message);
  }
 };
@@ -36,9 +34,9 @@ const signUp = async () => {
         <h3>Sign Up</h3>
         <input type="text" placeholder='Enter your email' onChange={(event) => {setSignUpEmail(event.target.value)}} />
         <input type="password" placeholder='password' onChange={(event) => {setSignUpPassword(event.target.value)}} />
-     
+      <Link to='/'>
         <button onClick={signUp}>Register</button>
-       
+      </Link>
         <p>Have an account? <Link to='/login'>Login</Link></p>
     </div>
     <h6></h6>

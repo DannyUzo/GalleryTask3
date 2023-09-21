@@ -11,10 +11,9 @@ import { auth } from '../Firebase-config'
 
  const login = async () => {
     try{
-        const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-       console.log(user)
+     await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+    
     } catch (error) {
-       console.log(error.message);
        setError(error.message);
     }
     alert("logged in")
@@ -45,9 +44,9 @@ onAuthStateChanged(auth, (currentUser) => {
        </Link>
         </div>
         <div>
-        <h3 id='in'>{user?.email} is logged in </h3>
-        <h3 id="out">User is logged out</h3>
-        <button id='logOutBtn' onClick={logout}>Log out</button>
+        {user? (<h3 id='in'>{user?.email} is logged in </h3>): null}
+        {user? null : (<h3 id="out">User is logged out</h3>) }
+       {user?( <button id='logOutBtn' onClick={logout}>Log out</button>) : null}
        
         <h5>{error}</h5>
        

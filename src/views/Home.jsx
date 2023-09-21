@@ -41,8 +41,6 @@ const Home = () => {
     useAxios(
       `search/photos?page=1&query=office&client_id=${process.env.REACT_APP_ACCESS_KEY}`
     );
-  console.log(response);
-  console.log(error);
 
   const handleDragDrop = (results) => {
     const { source, destination, type } = results;
@@ -85,9 +83,7 @@ const Home = () => {
     return Sub;
   });
 
-  const logout = async () => {
-    await signOut(auth); 
-};
+
 
   return (
     <div>
@@ -174,7 +170,7 @@ const Home = () => {
             ) : (
               response.map((data, index) => (
                 <div className="card" key={data.id}>
-                  <Zoom>
+                  <Zoom triggerOnce>
                     <div className="image-item">
                       <img src={data.urls.small} alt={data.alt_description} />
                       <div class="image-description">
