@@ -1,38 +1,205 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.navbar{
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background:transparent;
+  backdrop-filter: blur(30px);
+  position: fixed;
   display: flex;
-  flex-direction: column;
+  z-index: 10;
   align-items: center;
+  justify-content: space-evenly;
+  box-shadow: 0.5px 0.5px 3px #32948c;
+}
+.search{
+  background:transparent;
+  width: 40%;
+  padding: 5px;
+  box-sizing: border-box;
+  border-bottom: 1px solid;
+  display: flex;
+  justify-content: space-between;
+}
+.search input{
+  width: 70%;
+  outline: none;
+  background:transparent;
+  border: none;
+}
+.search input:focus{
+  margin-top: -5px;
+}
+.search input::placeholder{
+  font-family: Tahoma;
+  font-size: 13px;
+}
+button{
+  padding: 3px;
+  padding-left: 7px;
+  padding-right: 7px;
+  border: none;
+  background-color: #2aa298;
+  border-radius: 5px;
+}
+button:focus{
+  transform: scale(0.8);
+  border: 1px solid rgb(34, 200, 200);
+}
+.auth{
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.signUp{
+  border: 1px solid #2aa298;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+}
+.SignUpForm, .loginForm{
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+width: 400px;
+padding: 10px;
+gap: 10px;
+border-radius: 10px;
+margin: 50px auto;
+border: 1px solid #2aa298;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+height: max-content;
+}
+.SignUpForm input, .loginForm input{
+ padding: 8px;
+
+}
+.logIn{
+  background-color: #2aa298;
+  cursor: pointer;
   color: white;
+  padding: 5px;
+}
+.main{
+  padding-top: 150px;
+  padding-bottom: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.images {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: border-box;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); 
+  grid-gap: 50px; 
+}
+.auth a{
+  text-decoration: none;
+  color: #1a1919;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.image-item {
+  position: relative; 
+}
+.image-description {
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius:10px;
+  background-color: rgba(0, 0, 0, 0.5); 
+  color: #fff; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0; 
+  transition: opacity 0.3s ease-in-out; 
+}
+
+/* On hover, show the description */
+.image-item:hover .image-description {
+  opacity: 1;
+}
+
+/* Style for individual image items (with box shadow) on hover */
+.image-item:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Add a box shadow on hover */
+  transform: scale(1.05); 
+}
+
+.images img{
+  width:300px;
+  height: 300px;
+  border-radius:10px;
+  object-fit: cover;
+}
+
+.SkeletonCard{
+  background: rgb(228, 228, 228);
+  width:250px;
+  border-radius: 10px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+@media (max-width:425px) {
+  .search{
+    position: absolute;
+    margin-top: 90px;
+    color: #1a1919;
+    width: 80%;
+    padding-left: 10px;
+    padding-right: 10px;
   }
+.navbar{
+  position: relative;
+}
+  .images img{
+    width: 250px;
+    height: 250px;
+  }
+  .main{
+    padding-top: 180px;
+  }
+.SignUpForm, .loginForm{
+width: 200px;
+}
+}
+/* Define responsive styles for larger screens */
+@media (min-width: 768px) {
+  .image-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust for larger screens */
+  }
+}
+.spinner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  padding: 1.1px;
+  background: conic-gradient(#0000 10%,#adadad) content-box;
+  -webkit-mask: repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+       radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 calc(100% - 9px));
+  -webkit-mask-composite: destination-in;
+  mask-composite: intersect;
+  animation: spinner-d55elj 1s infinite steps(10);
+}
+
+@keyframes spinner-d55elj {
   to {
-    transform: rotate(360deg);
+     transform: rotate(1turn);
   }
 }
