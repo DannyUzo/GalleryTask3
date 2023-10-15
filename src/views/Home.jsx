@@ -7,7 +7,6 @@ import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import useAxios from "../hooks/useAxios";
 
-// import { useAuthState } from 'firebase/auth'
 import { auth } from "../Firebase-config";
 import Login from "../views/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -33,9 +32,7 @@ const Home = () => {
     }
   };
 
-  // useEffect(() => {
-  //   handleSearch();
-  // }, []);
+ 
 
   const { response, isLoading, error, fetchData, setResponse, setError } =
     useAxios(
@@ -68,10 +65,6 @@ const Home = () => {
 
   const [user, setUser] = useState({});
 
-  // useAuthState(auth, (currentUser) => {
-  //     setUser(currentUser);
-  // })
-
   useEffect(() => {
     const Sub = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -88,7 +81,7 @@ const Home = () => {
   return (
     <div>
       <nav className="navbar">
-        <div className="logo">Logo</div>
+        <div className="logo">DND</div>
         <div className="search">
           <input
             type="search"
@@ -103,6 +96,9 @@ const Home = () => {
         {user ? (
           <>      
             <button id='logOutBtn' onClick={()=> auth.signOut(auth)}>Log out</button>
+            <NavLink to="login">
+            <h1>{user?.email && user.email.length > 0 ? user.email[0] : ""}</h1>
+            </NavLink>
           </>
         ) : (
           <div className="auth">
@@ -116,7 +112,7 @@ const Home = () => {
         )}
       </nav>
       <h2>{error}</h2>
-
+  
       {user ? (
         <DragDropContext onDragEnd={handleDragDrop}>
           <Droppable droppableId="ROOT" type="group" className="images">
@@ -140,7 +136,8 @@ const Home = () => {
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}
                           >
-                            <Zoom>
+                            
+                            <Zoom triggerOnce>
                               <div className="image-item">
                                 <img
                                   src={data.urls.small}
@@ -157,13 +154,15 @@ const Home = () => {
                     ))
                   )}
                 </div>
-                {/* {provided.placeholder} */}
               </div>
             )}
           </Droppable>
         </DragDropContext>
       ) : (
         <div className="main">
+          <div className="DNDmessage">
+            Please login to use drag and drop feature 
+          </div>
           <div className="images">
             {isLoading ? (
               <Skeleton item={10} />
