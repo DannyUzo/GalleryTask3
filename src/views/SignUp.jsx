@@ -21,10 +21,10 @@ const SignUp = () => {
     try {
       await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword);
     } catch (error) {
-      if (error.code === 400) {
-        console.log("invalid email");
-      }
-      setError(error.message);
+      if (error.message === "Firebase: Error (auth/email-already-in-use).") {
+        setError("A user with the same email already exists")
+      }else if(error.message === "Firebase: Error (auth/invalid-email).")
+      setError("Invaild Email inputed, try adding the '@' symbol ");
     }
   };
 

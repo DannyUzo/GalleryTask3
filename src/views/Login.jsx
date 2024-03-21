@@ -1,32 +1,35 @@
 import React, { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { auth } from "../Firebase-config";
 
+import { FcApproval } from "react-icons/fc";
+
+import { auth } from "../Firebase-config";
 const Login = () => {
+  const navigate = useNavigate();
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+
   const login = async () => {
     try {
       await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-    } catch (error) {
-      if(error.message === "Firebase: Error (auth/invalid-login-credentials)."){
-        setError("Invaild Email or Password")
-      }else if(error.message === undefined){
-        setError("User not found")
+      navigate("/");
+    } catch (err) {
+      setError(true);
+      setLoginEmail("");
+      setLoginPassword("");
+      console.error(err.code);
+      if (err.code.includes("invalid-login")) {
+        setErrorMessage("hello world");
       }
-      else {
-         setError(error.message);
-       }
     }
-    console.log(error.message)
   };
 
   const logout = async () => {
@@ -42,27 +45,27 @@ const Login = () => {
   return (
     <div>
       <NavLink to="/">Back to Gallery</NavLink>
-
       <div className="loginForm">
         <h3>Login</h3>
         <input
           type="email"
           placeholder="Enter your email"
           required
+          value={loginEmail}
           onChange={(event) => setLoginEmail(event.target.value)}
         />
         <input
-          type="password"
+          type='password'
           placeholder="password"
           required
+          value={loginPassword}
           onChange={(event) => setLoginPassword(event.target.value)}
         />
         {user ? (
-          <NavLink to="/">
-            <div className="message">
-              Successfully logged in <br /> Please proceed to the home page
-            </div>
-          </NavLink>
+          <div className="message">
+            {/* <RiErrorWarningLine /> */}
+            Successfully logged in <br /> Please proceed to the home page
+          </div>
         ) : (
           <button onClick={login}>Login</button>
         )}
@@ -76,9 +79,7 @@ const Login = () => {
           </button>
         ) : null}
 
-        <h5>{errorMessage}</h5>
-
-        <h5>{error}</h5>
+        {error && <h5>{errorMessage}</h5>}
       </div>
     </div>
   );
