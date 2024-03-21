@@ -1,6 +1,10 @@
 import React, { useEffect, useCallback } from "react";
 import Skeleton from "../components/Skeleton";
 
+import { MdOutlineFileDownload } from "react-icons/md";
+import { RiErrorWarningLine } from "react-icons/ri";
+
+import { useScrollTop } from "../hooks/use-scroll-top";
 import { Zoom } from "react-awesome-reveal";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { NavLink } from "react-router-dom";
@@ -13,7 +17,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState("");
-
+  const scrolled = useScrollTop();
   const handleInput = (e) => {
     setSearchValue(e.target.value);
   };
@@ -31,8 +35,6 @@ const Home = () => {
       handleSearch();
     }
   };
-
- 
 
   const { response, isLoading, error, fetchData, setResponse, setError } =
     useAxios(
@@ -62,7 +64,7 @@ const Home = () => {
       return setResponse(reorderedImages);
     }
   };
-
+  console.log(response);
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -76,44 +78,97 @@ const Home = () => {
     return Sub;
   });
 
-
-
   return (
     <div>
-      <nav className="navbar">
-        <div className="logo">DND</div>
-        <div className="search">
-          <input
-            type="search"
-            placeholder="Search image by tagname"
-            onChange={handleInput}
-            value={searchValue}
-            onKeyDown={handleEnterSearch}
-          />
-          <button onClick={handleSearch}>Search</button>
-        </div>
-
-        {user ? (
-          <>      
-            <button id='logOutBtn' onClick={()=> auth.signOut(auth)}>Log out</button>
-            <NavLink to="login">
-            <h1>{user?.email && user.email.length > 0 ? user.email[0] : ""}</h1>
-            </NavLink>
-          </>
-        ) : (
-          <div className="auth">
-            <NavLink to="signup">
-              <div className="signUp">Sign Up</div>
-            </NavLink>
-            <NavLink to="login">
-              <div className="logIn">Log In</div>
-            </NavLink>
+      {scrolled && (
+        <nav className="navbar">
+          <div className="logo">DND</div>
+          <div className="search">
+            <input
+              type="search"
+              placeholder="Search image by tagname"
+              onChange={handleInput}
+              value={searchValue}
+              onKeyDown={handleEnterSearch}
+            />
+            <button onClick={handleSearch}>Search</button>
           </div>
-        )}
-      </nav>
-      <h2>{error}</h2>
-  
-      {user ? (
+        </nav>
+      )}
+
+      <div className="main">
+        <section>
+            <div>
+              <h1>Download <span>Free</span> Images</h1>
+            </div>
+            <div className="search1">
+              <input
+                type="search"
+                placeholder="Search image by tagname"
+                onChange={handleInput}
+                value={searchValue}
+                onKeyDown={handleEnterSearch}
+              />
+              <button onClick={handleSearch}>Search</button>
+            </div>
+            <div className="intro_text">
+              <p>With over 5000 images across different catagories at your finger tips. Search, download and share high quality images suitable for whatever you want.🚀🙌📷 </p>
+            </div>
+          <div>
+          </div>
+        </section>
+        <div className="images">
+          {isLoading ? (
+            <Skeleton item={10} />
+          ) : (
+            response.map((data, index) => (
+              <div className="card" key={data.id}>
+                <Zoom triggerOnce>
+                  <div className="image-item">
+                    <img src={data.urls.regular} alt={data.alt_description} />
+                    <div class="image-description">
+                      <a
+                        download
+                        title="Download"
+                        className="download_btn"
+                        href={data.urls.small}
+                      >
+                        <MdOutlineFileDownload />
+                      </a>
+                      <div>{/* <>{data.alt_description}</> */}</div>
+                    </div>
+                  </div>
+                </Zoom>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Home;
+
+{/* {user ? (
+    <>      
+      <button id='logOutBtn' onClick={()=> auth.signOut(auth)}>Log out</button>
+      <NavLink to="login">
+      <h1>{user?.email && user.email.length > 0 ? user.email[0] : ""}</h1>
+      </NavLink>
+    </>
+  ) : (
+    <div className="auth">
+    <NavLink to="signup">
+        <div className="signUp">Sign Up</div>
+        </NavLink>
+        <NavLink to="login">
+        <div className="logIn">Log In</div>
+        </NavLink>
+        </div>
+      )} */}
+{
+  /* {user ? (
         <DragDropContext onDragEnd={handleDragDrop}>
           <Droppable droppableId="ROOT" type="group" className="images">
             {(provided) => (
@@ -137,7 +192,6 @@ const Home = () => {
                             ref={provided.innerRef}
                           >
                             
-                            <Zoom triggerOnce>
                               <div className="image-item">
                                 <img
                                   src={data.urls.small}
@@ -147,7 +201,6 @@ const Home = () => {
                                   {data.alt_description}
                                 </div>
                               </div>
-                            </Zoom>
                           </div>
                         )}
                       </Draggable>
@@ -161,6 +214,7 @@ const Home = () => {
       ) : (
         <div className="main">
           <div className="DNDmessage">
+            <RiErrorWarningLine/>
             Please login to use drag and drop feature 
           </div>
           <div className="images">
@@ -182,9 +236,5 @@ const Home = () => {
             )}
           </div>
         </div>
-      )}
-    </div>
-  );
-};
-
-export default Home;
+      )} */
+}
