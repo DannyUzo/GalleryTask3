@@ -1,36 +1,36 @@
 import axios from "axios";
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from "react";
 
-const useAxios = (param) =>{
-    const [response, setResponse] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+const useAxios = (param) => {
+  const [response, setResponse] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
- axios.defaults.baseURL = 'https://api.unsplash.com'
+  axios.defaults.baseURL = "https://api.unsplash.com";
 
-const fetchData = async (url) => {
-    try{
-   setIsLoading(true);
-   const res = await axios(url);
-   setResponse(res.data.results);
-    }catch(err){
-    setError(err)
-    }finally{
-  setIsLoading(false)
+  const fetchData = async (url) => {
+    try {
+      setIsLoading(true);
+      const res = await axios(url);
+      setResponse(res.data.results);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
     }
-}
-useEffect(()=>{
-  fetchData(param);
-},[param])
+  };
+  useEffect(() => {
+    fetchData(param);
+  }, [param]);
 
-    return{
-      setResponse,
-      setIsLoading,
-       response,
-       setError,
-       isLoading,
-       error,
-       fetchData: url => fetchData(url)
-    }
-}
-export default useAxios
+  return {
+    setResponse,
+    setIsLoading,
+    response,
+    setError,
+    isLoading,
+    error,
+    fetchData: (url) => fetchData(url),
+  };
+};
+export default useAxios;
