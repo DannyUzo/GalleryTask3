@@ -21,9 +21,14 @@
   box-shadow: 0.5px 0.5px 3px #deb260;
 }
 .logo{
+  display: flex;
+  align-items: center;
   font-family: cursive;
-  color: #deb260;
+  color: #ffac38;
   font-weight: 800;
+  background-color: white;
+  border-radius: 7px;
+  padding: 3px;
 }
 .search{
   background:transparent;
@@ -163,7 +168,7 @@ h5{
 section{
   top:0;
   width: 100%;
-  height: 65vh;
+  height: 72vh;
   background-image: url("assets/home_back.jpg");
   background-size: cover;
   background-position: center;
