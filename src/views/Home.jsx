@@ -1,19 +1,21 @@
-import React, { useEffect, useCallback } from "react";
+// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+// import { RiErrorWarningLine } from "react-icons/ri";
+// import { auth } from "../Firebase-config";
+// import { onAuthStateChanged, signOut } from "firebase/auth";
+
+
+import { useCallback } from "react";
 import Skeleton from "../components/Skeleton";
 
+import { TypeAnimation } from "react-type-animation";
 import { MdOutlineFileDownload } from "react-icons/md";
-import { RiErrorWarningLine } from "react-icons/ri";
 
 import { useScrollTop } from "../hooks/use-scroll-top";
 import { Zoom } from "react-awesome-reveal";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import useAxios from "../hooks/useAxios";
 
-import { auth } from "../Firebase-config";
-import Login from "../views/Login";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { Logo } from "../components/logo";
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -22,7 +24,7 @@ const Home = () => {
     setSearchValue(e.target.value);
   };
 
-  const IMAGES_PER_PAGE = 24;
+  const IMAGES_PER_PAGE = 36;
 
   const handleSearch = useCallback(() => {
     fetchData(
@@ -36,53 +38,53 @@ const Home = () => {
     }
   };
 
-  const { response, isLoading, error, fetchData, setResponse, setError } =
+  const { response, isLoading, error, fetchData } =
     useAxios(
-      `search/photos?page=1&query=office&client_id=${process.env.REACT_APP_ACCESS_KEY}`
+      `search/photos?page=1&query=random&client_id=${process.env.REACT_APP_ACCESS_KEY}`
     );
 
-  const handleDragDrop = (results) => {
-    const { source, destination, type } = results;
+  // const handleDragDrop = (results) => {
+  //   const { source, destination, type } = results;
 
-    if (!destination) return;
+  //   if (!destination) return;
 
-    if (
-      source.drappableId === destination.droppableId &&
-      source.index === destination.index
-    )
-      return;
+  //   if (
+  //     source.drappableId === destination.droppableId &&
+  //     source.index === destination.index
+  //   )
+  //     return;
 
-    if (type === "group") {
-      const reorderedImages = [...response];
+  //   if (type === "group") {
+  //     const reorderedImages = [...response];
 
-      const sourceIndex = source.index;
-      const destinationIndex = destination.index;
+  //     const sourceIndex = source.index;
+  //     const destinationIndex = destination.index;
 
-      const [removedImages] = reorderedImages.splice(sourceIndex, 1);
-      reorderedImages.splice(destinationIndex, 0, removedImages);
+  //     const [removedImages] = reorderedImages.splice(sourceIndex, 1);
+  //     reorderedImages.splice(destinationIndex, 0, removedImages);
 
-      return setResponse(reorderedImages);
-    }
-  };
-  console.log(response);
-  const [user, setUser] = useState({});
+  //     return setResponse(reorderedImages);
+  //   }
+  // };
+  // console.log(response);
+  // const [user, setUser] = useState({});
 
-  useEffect(() => {
-    const Sub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-    });
-    return Sub;
-  });
+  // useEffect(() => {
+  //   const Sub = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setUser(user);
+  //     } else {
+  //       setUser(null);
+  //     }
+  //   });
+  //   return Sub;
+  // });
 
   return (
     <div>
       {scrolled && (
         <nav className="navbar">
-          <div className="logo">DND</div>
+          <Logo />
           <div className="search">
             <input
               type="search"
@@ -98,24 +100,60 @@ const Home = () => {
 
       <div className="main">
         <section>
-            <div>
-              <h1>Download <span>Free</span> Images</h1>
-            </div>
-            <div className="search1">
-              <input
-                type="search"
-                placeholder="Search image by tagname"
-                onChange={handleInput}
-                value={searchValue}
-                onKeyDown={handleEnterSearch}
-              />
-              <button onClick={handleSearch}>Search</button>
-            </div>
-            <div className="intro_text">
-              <p>With over 5000 images across different catagories at your finger tips. Search, download and share high quality images suitable for whatever you want.🚀🙌📷 </p>
-            </div>
           <div>
+            <h1>
+              Download{" "}
+              <span>
+                <TypeAnimation
+                  sequence={[
+                    "Free",
+                    1000,
+                    "Unfiltered",
+                    1000,
+                    "Cool",
+                    1000,
+                    "Natural",
+                    1000,
+                    "Quality",
+                    1000,
+                    "Inspiring",
+                    1000,
+                    "Creative",
+                    1000,
+                    "Expressive",
+                    1000,
+                    "Diverse",
+                    1000,
+                    "Captivating",
+                    1000,
+                  ]}
+                  wrapper="span"
+                  speed={50}
+                  style={{ fontSize: "1em", display: "inline-block" }}
+                  repeat={Infinity}
+                />
+              </span>{" "}
+              Images
+            </h1>
           </div>
+          <div className="search1">
+            <input
+              type="search"
+              placeholder="Search image by tagname"
+              onChange={handleInput}
+              value={searchValue}
+              onKeyDown={handleEnterSearch}
+            />
+            <button onClick={handleSearch}>Search</button>
+          </div>
+          <div className="intro_text">
+            <p>
+              With over 5000 images across different catagories at your finger
+              tips. Search, download and share high quality images suitable for
+              whatever you want.🚀🙌📷{" "}
+            </p>
+          </div>
+          <div></div>
         </section>
         <div className="images">
           {isLoading ? (
@@ -150,7 +188,8 @@ const Home = () => {
 
 export default Home;
 
-{/* {user ? (
+{
+  /* {user ? (
     <>      
       <button id='logOutBtn' onClick={()=> auth.signOut(auth)}>Log out</button>
       <NavLink to="login">
@@ -166,7 +205,8 @@ export default Home;
         <div className="logIn">Log In</div>
         </NavLink>
         </div>
-      )} */}
+      )} */
+}
 {
   /* {user ? (
         <DragDropContext onDragEnd={handleDragDrop}>
