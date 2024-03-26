@@ -1,8 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import Skeleton from "../components/Skeleton";
 
 import { TypeAnimation } from "react-type-animation";
 import { MdOutlineFileDownload } from "react-icons/md";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { useScrollTop } from "../hooks/use-scroll-top";
 import { Zoom } from "react-awesome-reveal";
@@ -13,6 +14,7 @@ import { Logo } from "../components/logo";
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState("");
+  const [responseData, setResponseData] = useState([]);
   const scrolled = useScrollTop();
   const handleInput = (e) => {
     setSearchValue(e.target.value);
@@ -32,12 +34,32 @@ const Home = () => {
     }
   };
 
-  const { response, isLoading, error, fetchData } =
-    useAxios(
-      `search/photos?page=1&query=random&client_id=${process.env.REACT_APP_ACCESS_KEY}`
-    );
+  const { response, isLoading, fetchData } = useAxios(
+    `search/photos?page=1&query=random&client_id=${process.env.REACT_APP_ACCESS_KEY}`
+  );
+  useEffect(() => {
+    if (response) {
+      setResponseData(response);
+    }
+  }, [response]);
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+    console.log(result);
 
-
+    if (!destination) {
+      return;
+    }
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+    const reorderedElements = [...responseData];
+    const [movedElement] = reorderedElements.splice(source.index, 1);
+    reorderedElements.splice(destination.index, 0, movedElement);
+    setResponseData(reorderedElements);
+  };
 
   return (
     <div>
@@ -114,126 +136,66 @@ const Home = () => {
           </div>
           <div></div>
         </section>
-        <div className="images">
-          {isLoading ? (
-            <Skeleton item={10} />
-          ) : (
-            response.map((data, index) => (
-              <div className="card" key={data.id}>
-                <Zoom triggerOnce>
-                  <div className="image-item">
-                    <img src={data.urls.regular} alt={data.alt_description} />
-                    <div className="image-description">
-                      <a
-                        download
-                        title="Download"
-                        className="download_btn"
-                        href={data.urls.small}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="images">
+            {isLoading ? (
+              <Skeleton item={10} />
+            ) : (
+              <Droppable droppableId="reorder">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className={`images ${snapshot.isDraggingOver && "over"}`}
+                  >
+                    {responseData.map((data, index) => (
+                      <Draggable
+                        className="card"
+                        key={data.id}
+                        draggableId={data.id}
+                        index={index}
                       >
-                        <MdOutlineFileDownload />
-                      </a>
-                      <div>{/* <>{data.alt_description}</> */}</div>
-                    </div>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <Zoom triggerOnce>
+                              <div className={`image-item`}>
+                                <img
+                                  src={data.urls.regular}
+                                  alt={data.alt_description}
+                                  className={`${
+                                    snapshot.isDragging && "onDrag"
+                                  }`}
+                                />
+                                <div className="image-description">
+                                  <a
+                                    download
+                                    title="Download"
+                                    className="download_btn"
+                                    href={data.urls.small}
+                                  >
+                                    <MdOutlineFileDownload />
+                                  </a>
+                                </div>
+                              </div>
+                            </Zoom>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
                   </div>
-                </Zoom>
-              </div>
-            ))
-          )}
-        </div>
+                )}
+              </Droppable>
+            )}
+          </div>
+        </DragDropContext>
       </div>
     </div>
   );
 };
 
 export default Home;
-
-{
-  /* {user ? (
-    <>      
-      <button id='logOutBtn' onClick={()=> auth.signOut(auth)}>Log out</button>
-      <NavLink to="login">
-      <h1>{user?.email && user.email.length > 0 ? user.email[0] : ""}</h1>
-      </NavLink>
-    </>
-  ) : (
-    <div className="auth">
-    <NavLink to="signup">
-        <div className="signUp">Sign Up</div>
-        </NavLink>
-        <NavLink to="login">
-        <div className="logIn">Log In</div>
-        </NavLink>
-        </div>
-      )} */
-}
-{
-  /* {user ? (
-        <DragDropContext onDragEnd={handleDragDrop}>
-          <Droppable droppableId="ROOT" type="group" className="images">
-            {(provided) => (
-              <div className="main" ref={provided.innerRef}>
-                <div className="images">
-                  {isLoading ? (
-                    <Skeleton item={10} />
-                  ) : (
-                    response.map((data, index) => (
-                      <Draggable
-                        draggableId={data.id}
-                        key={data.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            className="card"
-                            key={data.id}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            
-                              <div className="image-item">
-                                <img
-                                  src={data.urls.small}
-                                  alt={data.alt_description}
-                                />
-                                <div class="image-description">
-                                  {data.alt_description}
-                                </div>
-                              </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      ) : (
-        <div className="main">
-          <div className="DNDmessage">
-            <RiErrorWarningLine/>
-            Please login to use drag and drop feature 
-          </div>
-          <div className="images">
-            {isLoading ? (
-              <Skeleton item={10} />
-            ) : (
-              response.map((data, index) => (
-                <div className="card" key={data.id}>
-                  <Zoom triggerOnce>
-                    <div className="image-item">
-                      <img src={data.urls.small} alt={data.alt_description} />
-                      <div class="image-description">
-                        {data.alt_description}
-                      </div>
-                    </div>
-                  </Zoom>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      )} */
-}
