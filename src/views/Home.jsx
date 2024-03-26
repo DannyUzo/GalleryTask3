@@ -1,9 +1,3 @@
-// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-// import { RiErrorWarningLine } from "react-icons/ri";
-// import { auth } from "../Firebase-config";
-// import { onAuthStateChanged, signOut } from "firebase/auth";
-
-
 import { useCallback } from "react";
 import Skeleton from "../components/Skeleton";
 
@@ -43,42 +37,7 @@ const Home = () => {
       `search/photos?page=1&query=random&client_id=${process.env.REACT_APP_ACCESS_KEY}`
     );
 
-  // const handleDragDrop = (results) => {
-  //   const { source, destination, type } = results;
 
-  //   if (!destination) return;
-
-  //   if (
-  //     source.drappableId === destination.droppableId &&
-  //     source.index === destination.index
-  //   )
-  //     return;
-
-  //   if (type === "group") {
-  //     const reorderedImages = [...response];
-
-  //     const sourceIndex = source.index;
-  //     const destinationIndex = destination.index;
-
-  //     const [removedImages] = reorderedImages.splice(sourceIndex, 1);
-  //     reorderedImages.splice(destinationIndex, 0, removedImages);
-
-  //     return setResponse(reorderedImages);
-  //   }
-  // };
-  // console.log(response);
-  // const [user, setUser] = useState({});
-
-  // useEffect(() => {
-  //   const Sub = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setUser(user);
-  //     } else {
-  //       setUser(null);
-  //     }
-  //   });
-  //   return Sub;
-  // });
 
   return (
     <div>
@@ -164,7 +123,7 @@ const Home = () => {
                 <Zoom triggerOnce>
                   <div className="image-item">
                     <img src={data.urls.regular} alt={data.alt_description} />
-                    <div class="image-description">
+                    <div className="image-description">
                       <a
                         download
                         title="Download"
