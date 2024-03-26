@@ -35,7 +35,7 @@
   width: 50%;
   padding: 5px;
   box-sizing: border-box;
-  border: 1px solid #deb260;
+  border: 1px solid #d6c8af;
   border-radius: 6px;
   display: flex;
   justify-content: space-between;
@@ -48,7 +48,9 @@
   background:transparent;
   border: none;
 }
-
+.over{
+  background-color: #fffefb ;
+}
 .search input::placeholder{
   font-family: Tahoma;
   font-size: 13px;
@@ -196,6 +198,8 @@ section{
 }
 .image-item {
   position: relative; 
+ 
+
 }
 .image-description {
   position: absolute; 
@@ -221,12 +225,17 @@ section{
 .image-item:hover {
   transform: scale(1.05); 
 }
+.onDrag{
+  border: 2px dotted rgb(242, 242, 242);
+  border-spacing: 4px;
+}
 
 .images img{
   width:300px;
   height: 300px;
   border-radius:10px;
   object-fit: cover;
+ 
 }
 .images a{
 bottom: 0;
