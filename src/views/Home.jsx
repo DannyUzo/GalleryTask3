@@ -4,7 +4,7 @@
 // import { onAuthStateChanged, signOut } from "firebase/auth";
 
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import Skeleton from "../components/Skeleton";
 
 import { TypeAnimation } from "react-type-animation";
@@ -19,6 +19,8 @@ import { Logo } from "../components/logo";
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState("");
+  const [noResponse, setNoResponse] = useState(false);
+
   const scrolled = useScrollTop();
   const handleInput = (e) => {
     setSearchValue(e.target.value);
@@ -27,10 +29,16 @@ const Home = () => {
   const IMAGES_PER_PAGE = 36;
 
   const handleSearch = useCallback(() => {
+    if (searchValue.trim() === "") {
+      alert("Please enter a search term");
+      return;
+    }
+  
     fetchData(
       `search/photos?page=1&per_page=${IMAGES_PER_PAGE}&query=${searchValue}&client_id=${process.env.REACT_APP_ACCESS_KEY}`
     );
   }, [searchValue]);
+  
 
   const handleEnterSearch = (e) => {
     if (e.key === "Enter") {
@@ -43,44 +51,17 @@ const Home = () => {
       `search/photos?page=1&query=random&client_id=${process.env.REACT_APP_ACCESS_KEY}`
     );
 
-  // const handleDragDrop = (results) => {
-  //   const { source, destination, type } = results;
+    useEffect(() => {
+      if (response.length === 0) {
+        setNoResponse(true);
+      } else {
+        setNoResponse(false);
+      }
+    }, [response]);
+  
 
-  //   if (!destination) return;
 
-  //   if (
-  //     source.drappableId === destination.droppableId &&
-  //     source.index === destination.index
-  //   )
-  //     return;
-
-  //   if (type === "group") {
-  //     const reorderedImages = [...response];
-
-  //     const sourceIndex = source.index;
-  //     const destinationIndex = destination.index;
-
-  //     const [removedImages] = reorderedImages.splice(sourceIndex, 1);
-  //     reorderedImages.splice(destinationIndex, 0, removedImages);
-
-  //     return setResponse(reorderedImages);
-  //   }
-  // };
-  // console.log(response);
-  // const [user, setUser] = useState({});
-
-  // useEffect(() => {
-  //   const Sub = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setUser(user);
-  //     } else {
-  //       setUser(null);
-  //     }
-  //   });
-  //   return Sub;
-  // });
-
-  return (
+    return (
     <div>
       {scrolled && (
         <nav className="navbar">
@@ -92,6 +73,7 @@ const Home = () => {
               onChange={handleInput}
               value={searchValue}
               onKeyDown={handleEnterSearch}
+              required
             />
             <button onClick={handleSearch}>Search</button>
           </div>
@@ -107,25 +89,25 @@ const Home = () => {
                 <TypeAnimation
                   sequence={[
                     "Free",
-                    1000,
+                    2000,
                     "Unfiltered",
-                    1000,
+                    2000,
                     "Cool",
-                    1000,
+                    2000,
                     "Natural",
-                    1000,
+                    2000,
                     "Quality",
-                    1000,
+                    2000,
                     "Inspiring",
-                    1000,
+                    2000,
                     "Creative",
-                    1000,
+                    2000,
                     "Expressive",
-                    1000,
+                    2000,
                     "Diverse",
-                    1000,
+                    2000,
                     "Captivating",
-                    1000,
+                    2000,
                   ]}
                   wrapper="span"
                   speed={50}
@@ -143,6 +125,7 @@ const Home = () => {
               onChange={handleInput}
               value={searchValue}
               onKeyDown={handleEnterSearch}
+              required
             />
             <button onClick={handleSearch}>Search</button>
           </div>
@@ -153,13 +136,20 @@ const Home = () => {
               whatever you want.🚀🙌📷{" "}
             </p>
           </div>
-          <div></div>
         </section>
+        {noResponse && (
+          <div className="notfound">
+            <h3>
+              Oops! No results for <span>{searchValue}</span>. Try refining your search term ✌️.
+            </h3>
+          </div>
+        )}
+        <h5>{error}</h5>
         <div className="images">
           {isLoading ? (
             <Skeleton item={10} />
           ) : (
-            response.map((data, index) => (
+            response.map((data) => (
               <div className="card" key={data.id}>
                 <Zoom triggerOnce>
                   <div className="image-item">
@@ -277,4 +267,43 @@ export default Home;
           </div>
         </div>
       )} */
+}
+{
+   // const handleDragDrop = (results) => {
+  //   const { source, destination, type } = results;
+
+  //   if (!destination) return;
+
+  //   if (
+  //     source.drappableId === destination.droppableId &&
+  //     source.index === destination.index
+  //   )
+  //     return;
+
+  //   if (type === "group") {
+  //     const reorderedImages = [...response];
+
+  //     const sourceIndex = source.index;
+  //     const destinationIndex = destination.index;
+
+  //     const [removedImages] = reorderedImages.splice(sourceIndex, 1);
+  //     reorderedImages.splice(destinationIndex, 0, removedImages);
+
+  //     return setResponse(reorderedImages);
+  //   }
+  // };
+  // console.log(response);
+  // const [user, setUser] = useState({});
+
+  // useEffect(() => {
+  //   const Sub = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setUser(user);
+  //     } else {
+  //       setUser(null);
+  //     }
+  //   });
+  //   return Sub;
+  // });
+
 }
