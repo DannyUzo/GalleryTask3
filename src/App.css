@@ -65,49 +65,7 @@ button:focus {
   transform: scale(0.8);
   border: 1px solid rgb(9, 18, 66);
 }
-.auth {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-.signUp {
-  border: 2px solid #1b1962;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.SignUpForm,
-.loginForm {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 400px;
-  padding: 10px;
-  gap: 10px;
-  border-radius: 10px;
-  margin: 50px auto;
-  border: 1px solid #1b1962;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  height: max-content;
-}
-.SignUpForm input,
-.loginForm input {
-  padding: 8px;
-}
-.logIn {
-  background-color: #1b1962;
-  cursor: pointer;
-  color: white;
-  padding: 5px;
-  border: 1px solid #1b1962;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
+
 .main {
   display: flex;
   align-items: center;
@@ -167,7 +125,7 @@ h5 {
 section {
   top: 0;
   width: 100%;
-  height: 72vh;
+  height: 78vh;
   background-image: url("assets/home_back.jpg");
   background-size: cover;
   background-position: center;
@@ -257,6 +215,7 @@ section {
 footer{
   height: 40px;
   padding: 10px;
+  margin-top: 15px;
   background-color: rgba(255, 176, 4, 0.894);
 
 }
