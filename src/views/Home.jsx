@@ -16,6 +16,7 @@ import { useState } from "react";
 import useAxios from "../hooks/useAxios";
 
 import { Logo } from "../components/logo";
+import { Footer } from "../components/footer";
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -62,7 +63,7 @@ const Home = () => {
 
 
     return (
-    <div>
+    <>
       {scrolled && (
         <nav className="navbar">
           <Logo />
@@ -144,7 +145,7 @@ const Home = () => {
             </h3>
           </div>
         )}
-        <h5>{error}</h5>
+        {/* <h5>{error}</h5> */}
         <div className="images">
           {isLoading ? (
             <Skeleton item={10} />
@@ -163,7 +164,6 @@ const Home = () => {
                       >
                         <MdOutlineFileDownload />
                       </a>
-                      <div>{/* <>{data.alt_description}</> */}</div>
                     </div>
                   </div>
                 </Zoom>
@@ -172,31 +172,14 @@ const Home = () => {
           )}
         </div>
       </div>
-    </div>
+      <Footer/>
+    </>
   );
 };
 
 export default Home;
 
-{
-  /* {user ? (
-    <>      
-      <button id='logOutBtn' onClick={()=> auth.signOut(auth)}>Log out</button>
-      <NavLink to="login">
-      <h1>{user?.email && user.email.length > 0 ? user.email[0] : ""}</h1>
-      </NavLink>
-    </>
-  ) : (
-    <div className="auth">
-    <NavLink to="signup">
-        <div className="signUp">Sign Up</div>
-        </NavLink>
-        <NavLink to="login">
-        <div className="logIn">Log In</div>
-        </NavLink>
-        </div>
-      )} */
-}
+
 {
   /* {user ? (
         <DragDropContext onDragEnd={handleDragDrop}>
