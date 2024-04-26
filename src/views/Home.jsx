@@ -1,7 +1,3 @@
-// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-// import { RiErrorWarningLine } from "react-icons/ri";
-// import { auth } from "../Firebase-config";
-// import { onAuthStateChanged, signOut } from "firebase/auth";
 
 
 import { useCallback, useEffect } from "react";
@@ -16,7 +12,6 @@ import { useState } from "react";
 import useAxios from "../hooks/useAxios";
 
 import { Logo } from "../components/logo";
-import { Footer } from "../components/footer";
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -27,18 +22,26 @@ const Home = () => {
     setSearchValue(e.target.value);
   };
 
-  const IMAGES_PER_PAGE = 36;
+
+  const { response, isLoading, error, fetchData } =
+    useAxios(
+      `search/photos?page=1&query=random&client_id=${process.env.REACT_APP_ACCESS_KEY}`
+    );
+
+  const IMAGES_PER_PAGE = 24;
 
   const handleSearch = useCallback(() => {
     if (searchValue.trim() === "") {
       alert("Please enter a search term");
       return;
     }
+
+    
   
     fetchData(
       `search/photos?page=1&per_page=${IMAGES_PER_PAGE}&query=${searchValue}&client_id=${process.env.REACT_APP_ACCESS_KEY}`
     );
-  }, [searchValue]);
+  }, [searchValue, fetchData]);
   
 
   const handleEnterSearch = (e) => {
@@ -47,10 +50,6 @@ const Home = () => {
     }
   };
 
-  const { response, isLoading, error, fetchData } =
-    useAxios(
-      `search/photos?page=1&query=random&client_id=${process.env.REACT_APP_ACCESS_KEY}`
-    );
 
     useEffect(() => {
       if (response.length === 0) {
@@ -145,7 +144,7 @@ const Home = () => {
             </h3>
           </div>
         )}
-        {/* <h5>{error}</h5> */}
+        <h5>{error}</h5>
         <div className="images">
           {isLoading ? (
             <Skeleton item={10} />
@@ -172,121 +171,9 @@ const Home = () => {
           )}
         </div>
       </div>
-      <Footer/>
     </>
   );
 };
 
 export default Home;
 
-
-{
-  /* {user ? (
-        <DragDropContext onDragEnd={handleDragDrop}>
-          <Droppable droppableId="ROOT" type="group" className="images">
-            {(provided) => (
-              <div className="main" ref={provided.innerRef}>
-                <div className="images">
-                  {isLoading ? (
-                    <Skeleton item={10} />
-                  ) : (
-                    response.map((data, index) => (
-                      <Draggable
-                        draggableId={data.id}
-                        key={data.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            className="card"
-                            key={data.id}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            
-                              <div className="image-item">
-                                <img
-                                  src={data.urls.small}
-                                  alt={data.alt_description}
-                                />
-                                <div class="image-description">
-                                  {data.alt_description}
-                                </div>
-                              </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      ) : (
-        <div className="main">
-          <div className="DNDmessage">
-            <RiErrorWarningLine/>
-            Please login to use drag and drop feature 
-          </div>
-          <div className="images">
-            {isLoading ? (
-              <Skeleton item={10} />
-            ) : (
-              response.map((data, index) => (
-                <div className="card" key={data.id}>
-                  <Zoom triggerOnce>
-                    <div className="image-item">
-                      <img src={data.urls.small} alt={data.alt_description} />
-                      <div class="image-description">
-                        {data.alt_description}
-                      </div>
-                    </div>
-                  </Zoom>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      )} */
-}
-{
-   // const handleDragDrop = (results) => {
-  //   const { source, destination, type } = results;
-
-  //   if (!destination) return;
-
-  //   if (
-  //     source.drappableId === destination.droppableId &&
-  //     source.index === destination.index
-  //   )
-  //     return;
-
-  //   if (type === "group") {
-  //     const reorderedImages = [...response];
-
-  //     const sourceIndex = source.index;
-  //     const destinationIndex = destination.index;
-
-  //     const [removedImages] = reorderedImages.splice(sourceIndex, 1);
-  //     reorderedImages.splice(destinationIndex, 0, removedImages);
-
-  //     return setResponse(reorderedImages);
-  //   }
-  // };
-  // console.log(response);
-  // const [user, setUser] = useState({});
-
-  // useEffect(() => {
-  //   const Sub = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setUser(user);
-  //     } else {
-  //       setUser(null);
-  //     }
-  //   });
-  //   return Sub;
-  // });
-
-}
